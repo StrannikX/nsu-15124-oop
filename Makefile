@@ -1,9 +1,14 @@
-all: string
+all: list
 
-string: main.o string.o
-	g++ -lstdc++ string.o main.o -o string
+run: list
+	./list
 
-main.o: main.cpp
+clean:
+	rm *.o
+	rm list
 
-string.o: String.cpp String.h
-	g++ -c String.cpp -o string.o
+list: main.o
+	g++ main.o -std=gnu++0x -lstdc++ -o list
+
+main.o: main.cpp List.h
+	g++ main.cpp -c -std=gnu++0x -O2 -o main.o

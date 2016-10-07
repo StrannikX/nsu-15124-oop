@@ -12,7 +12,6 @@ class String
         virtual ~String();
 
         int length() const;
-    protected:
     private:
         int len;
         char *str;
@@ -20,6 +19,7 @@ class String
     public:
         operator char*() const;
         char& operator[](int);
+        char operator[](int) const;
         String& operator=(const String&);
 
         friend String operator+(const String&, const String&);

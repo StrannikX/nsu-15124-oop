@@ -40,6 +40,12 @@ char& String::operator[](int index) {
     return str[index];
 }
 
+char String::operator[](int index) const {
+    if (index >= len && len < 0) throw "Illegal index";
+    return str[index];
+}
+
+
 String& String::operator=(const String& old_str) {
     if (str != NULL && len > 0) {
         delete[] str;

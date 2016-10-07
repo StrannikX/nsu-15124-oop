@@ -1,19 +1,36 @@
 # include <iostream>
-# include "String.h"
+# include "List.h"
+# include <string>
 
 int main(int argc, char** argv) {
-    String str("Hello world!");
-    String str2;
-    str2 = "ab";
-    std::cout << str << std::endl;
-    std::cout << str + str2 << std::endl;
-    str2 += "c";
-    str2 += str;
-    str2[4] = 'f';
-    std::cout << str + str2 << std::endl;
-    std::cout << str2.length() << std::endl;
-    String str3;
-    str2 += str3;
-    std::cout << str + str3 + str2 << std::endl;
+
+    List<int> l;
+    l.append(100);
+    l.prepend(23);
+    l << 223;
+    std::cout << l.pop() << l.shift() << endl << endl;
+
+    for (int i = 0; i < 10; i++) {
+        if (i % 2) {
+            l.prepend(i * i);
+        } else {
+            l.append(i * i  * i);
+        }
+    }
+
+    ListIterator<int> it(l);
+    while (it) {
+        std::cout << *it << endl;
+        it++;
+    }
+
+    List<std::string> ls;
+    ls << "Hello";
+
+    ListIterator<std::string> its(ls);
+
+    std::cout << *its << " ";
+    std::cout << its->append(" world!") << endl;
+
     return 0;
 }

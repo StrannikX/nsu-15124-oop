@@ -1,113 +1,93 @@
 # ifndef LIST_H
 # define LIST_H
 
-// For nulllptr using
 # include <cstddef>
 
 using namespace std;
  
 template<class T> class ListIterator;
 
-// Main list class
-// Incapsulate realisation of list operations
+// Класс списка
 template<class T> class List {
 protected:
     
-    // Struct - node of list
-    // It use only in this class
+    // Структура для узла
     struct Node {
         Node * next;
         Node * prev;
         T value;
 
-        // Constructor of list node
-        // For fast node initialisation
         Node(T value) {
             this->value = value;
             next = prev = nullptr;
         }
     };
     
-    // Head node of list
-    // If list is empty this field have nullptr value
+    // Головной узел
     Node * head;
-    // Length of list
+    // Длина
     unsigned length;
 
 private:
-    // Forbid copy constructor and asigment operator
+    // Запрет использования
     List(const List<T>& l);
     List<T>& operator=(const List&);
 
 public:
 
-    // Create empty list
+    // Создать пустой список
     List() {
         head = tail = nullptr;
         length = 0;
     }
 
-    // Add value to list tail
+    // Добавить значение в конец
     void append(T value) {
         Node * node = new Node(value);
-        // If list is empty
         if (length == 0) {
-            // Assign this node head field
             head = node;
         } else {
-            // If list isn't empty
-            // Search list tail
             Node * tail = head;
             for (; tail->next != nullptr; tail = tail->next);
-            // And add node after tail
             tail->next = node;
         }
-        // Don't forget about length field
         length++;
     }
     
-    // Add value to top of list
+    // Добавить в начало
     void prepend(T value) {
         Node * node = new Node(value);
         node->next = head;
         head = node;
         length++;
     }
-    // Size of list
+    // Размер списка
     unsigned size() {
         return length;
     }
     
-    // Remove node from bottom of list
-    // And return value of this node
+    // Удалить с конца и вернуть значение
     T pop() {
         if (length == 0) throw "List is empty";
 
         Node * node = head;
-        // if length of list is 1
         if (length == 1) {
-            // node that we should remove is list head
             node = head;
             head = nullptr;
         } else {
-            // else we should find node find node that prepend tail node
             Node * tmp = head;
             for (; tmp->next->next != nullptr; tmp = tmp->next);
-            // Assign tail node to node variable
             node = tmp->next;
-            // And assign nullptr value to `next` field of new tail
             tmp->next = nullptr;
         }
-        // Get node value
         T val = node->value;
-        // And delete node
         delete node;
         
         length--;
         
         return val;
     }
-    // Remove first node and return value
+    // Удалить из начала и вернуть значение
     T shift(){
         if (length == 0) throw "List is empty";
         Node * node = head;
@@ -119,11 +99,11 @@ public:
         delete node;
         return val;
     }
-    // Check for list empty
+    // Проверка на пустоту
     bool isEmpty() {
         return length == 0;
     }
-    // Destructor, remove all nodes
+    // Деструктор, удаляет узлы списка
     ~List() {
         Node * node = head;
         while (node != nullptr) {
@@ -133,55 +113,45 @@ public:
         }
     }
 
-    // iterator is friend of this class
     friend ListIterator<T>;
 };
 
-// Class of list iterator
+// Итератор по списку
 template <class T> class ListIterator {
     typename List<T>::Node * node;
 
 public:
-    // Constructor
-    // Make iterator for list
-    // That shlould passed as param
+    // Конструктор, принимает итерируемый список
     ListIterator(List<T> const &list) {
         node = list.head;
     }
-    
-    // Create iterator from other iterator
-    ListIterator(ListIterator<T> const &it) {
-        node = it.node;
-    }
 
-    // Cast operator to bool
-    // Return false if iterator reached the end of list
+    // Приведение к bool
+    // Если обход окончен - то false, нет - true
     operator bool() {
         return node != nullptr;
     }
 
-    // Increment opertor (postfix form)
-    // Move iterator to next node
+    // Сдвинуть итератор на один элемент
     ListIterator& operator++() {
         if (node == nullptr) throw "End of list";
         node = node->next;
         return *this;
     }
 
-    // Increment opertor (prefix form)
-    // Move iterator to next node
+    // Сдвинуть итератор на один элемент (постфикснаяя форма)
     ListIterator& operator++(int) {
         if (node == nullptr) throw "End of list";
         node = node->next;
         return *this;
     }
 
-    // Get value of current node
+    // Получить значение текущего узла
     T& operator*() {
         return node->value;
     }
 
-    // Give access to members of the stored object
+    // Получить доступ к членам хранимогобъекта
     T* operator->() {
         return &(node->value);
     }

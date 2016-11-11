@@ -1,14 +1,20 @@
-all: list
+all: expr
 
-run: list
-	./list
+run: all
+	./main
 
 clean:
 	rm *.o
-	rm list
+	rm expr
 
-list: main.o
-	g++ main.o -std=gnu++0x -lstdc++ -o list
+expr: main.o expr_parser.o Expressions.o
+	g++ main.o expr_parser.o Expressions.o -std=gnu++14 -lstdc++ -o main
 
-main.o: main.cpp List.h
-	g++ main.cpp -c -std=gnu++0x -O2 -o main.o
+main.o: main.cpp Expressions.hpp
+	g++ main.cpp -c -std=gnu++14 -O2 -o main.o
+
+expr_parser.o: expr_parser.cpp expr_parser.hpp Expressions.hpp
+	g++ expr_parser.cpp -c -std=gnu++14 -O2 -o expr_parser.o
+
+Expressions.o: Expressions.hpp Expressions.cpp
+	g++ Expressions.cpp -c -std=gnu++14 -O2 -o Expressions.o

@@ -4,8 +4,11 @@
 # include "expr_parser.hpp"
 # include <string>
 # include <vector>
+# include <cstdlib>
 
 int main(int argc, char** argv) {
+
+    system("clear");
 
     std::string str;
 

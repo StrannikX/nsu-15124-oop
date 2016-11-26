@@ -1,13 +1,13 @@
-all: expr
+all: main
 
 run: all
 	./main
 
 clean:
 	rm *.o
-	rm expr
+	rm main
 
-expr: main.o expr_parser.o Expressions.o
+main: main.o expr_parser.o Expressions.o
 	g++ main.o expr_parser.o Expressions.o -std=gnu++14 -lstdc++ -o main
 
 main.o: main.cpp Expressions.hpp
